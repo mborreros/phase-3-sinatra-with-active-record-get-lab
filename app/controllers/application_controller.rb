@@ -1,5 +1,25 @@
 class ApplicationController < Sinatra::Base
 
-  # add routes
+  set :default_content_type, "application/json"
+
+  get "/bakeries" do
+    bakeries = Bakery.all
+    bakeries.to_json
+  end
+
+  get "/bakeries/:id" do
+    bakery = Bakery.find(params[:id])
+    bakery.to_json(include: :baked_goods)
+  end
+
+  get "/baked_goods/by_price" do
+    all_goods = BakedGood.all.order(price: :desc)
+    all_goods.to_json
+  end
+
+  get "/baked_goods/most_expensive" do
+    priciest_good = BakedGood.all.order(price: :desc).first
+    priciest_good.to_json
+  end
 
 end
